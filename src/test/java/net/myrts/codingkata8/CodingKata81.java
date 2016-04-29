@@ -1,4 +1,4 @@
-package de.osb.codingkata;
+package net.myrts.codingkata8;
 
 import org.junit.Test;
 
@@ -80,7 +80,7 @@ public class CodingKata81 {
         List<String> resList = flatMapStrings(lists);
         //then
 
-        assertEquals("Length is not equal", strList2.size() + strList.size(), resList);
+        assertEquals("Length is not equal", strList2.size() + strList.size(), resList.size());
     }
 
     private List<String> flatMapStrings(List<List<String>> strList) {
