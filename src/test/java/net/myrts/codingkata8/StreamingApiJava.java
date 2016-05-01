@@ -3,14 +3,15 @@ package net.myrts.codingkata8;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static junit.framework.Assert.assertEquals;
 
-public class CodingKata81 {
+public class StreamingApiJava {
     @Test
     public void shouldFilterStrings() {
         //given
@@ -56,7 +57,7 @@ public class CodingKata81 {
     @Test
     public void shouldFlatMapStrings() {
         //given
-        List<String> strList = new ArrayList<>(10);
+        List<String> strList = new ArrayList<>();
         strList.add("adddd");
         strList.add("addddfdsfsdd");
         strList.add("addgdsgdsgdd");
@@ -65,8 +66,9 @@ public class CodingKata81 {
         strList.add("add");
         strList.add("");
         strList.add("add");
+        strList.add(null);
 
-        List<String> strList2 = new ArrayList<>(10);
+        List<String> strList2 = new ArrayList<>();
         strList.add("adddd");
         strList.add("addddfdsfsdd");
         strList.add("");
@@ -83,27 +85,42 @@ public class CodingKata81 {
         assertEquals("Length is not equal", strList2.size() + strList.size(), resList.size());
     }
 
+    @Test
+    public void shouldProvideSumReduce() {
+        //given
+        List<Integer> intList = new ArrayList<>();
+        intList.add(5);
+        intList.add(4);
+        intList.add(6);
+        intList.add(1);
+        intList.add(2);
+
+        //when
+        int sumValue = sumReduceInt(intList);
+        int sumIntVal = sumInt(intList);
+        //then
+        assertEquals("Length is not equal", 18, sumValue);
+        assertEquals("Length is not equal", 18, sumIntVal);
+    }
+
+    private int sumReduceInt(List<Integer> intList) {
+        return intList.stream().reduce((integer, integer2) -> integer + integer2).get();
+    }
+
+    private int sumInt(List<Integer> intList) {
+        IntStream intStream = intList.stream().mapToInt(Integer::intValue);
+        return intStream.sum();
+    }
+
     private List<String> flatMapStrings(List<List<String>> strList) {
-        List<String> resList = new ArrayList<>();        
         Stream<String> stream = strList.stream()
-                .flatMap(new Function<List<String>, Stream<? extends String>>() {
-                    @Override
-                    public Stream<? extends String> apply(List<String> strings) {
-                        //return resList.add(strings);
-                        return null;
-                    }
-                });
+                .flatMap(Collection::stream);
         return stream.collect(Collectors.toList());
     }
 
     private List<String> mapStrings(List<String> strList) {
         Stream<String> stream = strList.stream()
-                .map(new Function<String, String>() {
-                    @Override
-                    public String apply(String str) {
-                        return str.toUpperCase();
-                    }
-                });
+                .map(String::toUpperCase);
         return stream.collect(Collectors.toList());
     }
 
